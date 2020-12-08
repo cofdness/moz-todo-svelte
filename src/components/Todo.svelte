@@ -1,10 +1,17 @@
 <script>
-    import {createEventDispatcher} from 'svelte'
+    import {createEventDispatcher, tick} from 'svelte'
+    import {selectOnFocus} from '../action'
 
     export let todo
     const dispatch = createEventDispatcher()
+
     let editing = false
     let name = todo.name
+
+    let saveOrCancelPressed = false
+
+    const focusOnInit = (node) => node && typeof node.focus === 'function' && node.focus()
+    const focusEditButton = node => saveOrCancelPressed && node && typeof node.focus === 'function' && node.focus()
 
     function update(updateTodo) {
         todo = {...todo, ...updateTodo}
@@ -13,17 +20,22 @@
 
     function onEdit() {
         editing = true
+        saveOrCancelPressed = false
     }
 
     function onSave() {
         update({name: name})
         editing = false
+        saveOrCancelPressed = true
     }
 
     function onCancel() {
         name = todo.name
         editing = false
+        saveOrCancelPressed = true
     }
+
+
 </script>
 
 <div class="stack-small">
@@ -31,7 +43,11 @@
     <form class="stack-small" on:submit|preventDefault={onSave} on:keydown={e=> e.key === 'Escape' && onCancel()}>
         <div class="form-group">
             <label for="todo-{todo.id}" class="todo-label">New name for '{todo.name}'</label>
-            <input type="text" bind:value={name} id="todo-{todo.id}" autocomplete="off" calss="todo-text" />
+            <input type="text"
+                   bind:value={name}
+                   use:selectOnFocus
+                   use:focusOnInit
+                   id="todo-{todo.id}" autocomplete="off" class="input input__md" />
         </div>
         <div class="btn-group">
             <button class="btn btn__primary todo-eidt">Save</button>
@@ -47,7 +63,9 @@
         </label>
     </div>
     <div class="btn-group">
-        <button type="button" class="btn" on:click={onEdit}>
+        <button type="button" class="btn"
+                on:click={onEdit}
+                use:focusEditButton>
             Edit <span class="visually-hidden">{todo.name}</span>
         </button>
         <button type="button" class="btn btn__danger" on:click={()=>dispatch('remove',todo)}>

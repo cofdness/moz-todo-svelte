@@ -198,8 +198,21 @@ body {
 	width: 100%;
 	font-size: 1.9rem;
 }
+
 [class*="__lg"]:not(:last-child) {
 	margin-bottom: 1rem;
+}
+
+[class*="__md"] {
+	display: inline-block;
+	width: 100%;
+	font-size: 1.9rem;
+	padding: 1rem;
+}
+
+[class*="__md"]:not(:last-child) {
+	margin-bottom: 1rem;
+
 }
 @media screen and (min-width: 620px) {
 	[class*="__lg"] {
