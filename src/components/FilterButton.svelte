@@ -1,5 +1,12 @@
 <script>
+    import {alert} from '../stores'
     export let filter = 'all'
+
+    $: {
+        if (filter === 'all')       $alert = 'Browsing all todos'
+        else if (filter === 'active') $alert = 'Browsing active todos'
+        else if (filter === 'completed') $alert = 'Browsing completed todos'
+    }
 
 </script>
 

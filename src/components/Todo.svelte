@@ -1,6 +1,5 @@
 <script>
-    import {createEventDispatcher, tick} from 'svelte'
-    import {selectOnFocus} from '../action'
+    import {createEventDispatcher} from 'svelte'
 
     export let todo
     const dispatch = createEventDispatcher()
@@ -11,6 +10,7 @@
     let saveOrCancelPressed = false
 
     const focusOnInit = (node) => node && typeof node.focus === 'function' && node.focus()
+    const selectOnFocus = (node) => node && typeof node.select === 'function' && node.select()
     const focusEditButton = node => saveOrCancelPressed && node && typeof node.focus === 'function' && node.focus()
 
     function update(updateTodo) {

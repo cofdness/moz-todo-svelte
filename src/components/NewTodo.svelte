@@ -1,5 +1,5 @@
 <script>
-    import {createEventDispatcher, onMount} from 'svelte'
+    import {createEventDispatcher} from 'svelte'
 
     let name = ''
     let nameEl
@@ -17,8 +17,6 @@
         name = ''
         nameEl.focus()
     }
-
-    onMount(() => autofocus && nameEl.focus())
 
 </script>
 

@@ -5,11 +5,14 @@
     import NewTodo from "./NewTodo.svelte";
     import TodosStatus from "./TodosStatus.svelte";
 
+    import {alert} from '../stores'
+
     export let todos = [];
 
     function removeTodo(todo) {
         todos = todos.filter(t => t.id !== todo.id)
         todosStatusEl.focus()
+        $alert = `Todo '${todo.name}' has been deleted`
     }
 
 
@@ -20,19 +23,24 @@
 
     function addTodo(name) {
         todos = [...todos, {id: newTodoId, name: name, completed: false}];
+        $alert = `Todo '${name}' has been added`
     }
 
     function updateTodo(todo) {
         const index = todos.findIndex(t => t.id === todo.id)
+        if (todos[index].name !== todo.name) $alert = `todo '${todos[index].name}' has been rename to '${todo.name}'`
+        if (todos[index].completed !== todo.completed ) $alert = `todo '${todos[index]}' marked as ${todo.completed ? 'completed' : 'active'}`
         todos[index] = {...todos[index], ...todo}
     }
 
     //check all and remove complete
     const checkAllTodos = completed => {
         todos = todos.map(todo => ({...todo, completed: completed}))
+        $alert = `${completed ? 'Checked' : 'Unchecked'} ${todos.length} todos`
     }
 
     const removeCompleted = () => {
+        $alert = `Removed ${todos.filter(todo => todo.completed).length} completed todos`
         todos = todos.filter(todo => !todo.completed)
     }
 
